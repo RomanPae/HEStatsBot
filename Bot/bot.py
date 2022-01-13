@@ -95,7 +95,6 @@ async def ranking(ctx):
     ORDER BY irating DESC;
     """)
     irating_list = cur.fetchall()
-    cur.close()
 
     embed = discord.Embed(title=f"", color=0x03f8fc,timestamp= ctx.message.created_at)
 
@@ -103,15 +102,23 @@ async def ranking(ctx):
     value = "--"
     name = "Team ranking iRating"
     embed.add_field(name=name, value=value, inline=False)
-
-    i = 1
+    rating_sum = 0
+    i = 0
     pos, display_name, irating = [], [], []
     for name, rating in irating_list:
+        i = i+1
         pos.append(f'{i}')
         display_name.append(f' {name} ')
         irating.append(f' {rating} ')
-        i = i+1
+        rating_sum = rating_sum + rating
+        
         #license_class.append(f' {irating_dict["license_class"][i]} '[:6])
+
+
+    # add average
+    rating_avg = int(rating_sum / i)
+    display_name.append ("Team Average")
+    irating.append(f"{rating_avg}")
 
     # create Field for Team Position
     value = "\n".join(pos)
@@ -129,6 +136,7 @@ async def ranking(ctx):
     embed.add_field(name=name, value=value, inline=True)
     
     await ctx.send(embed = embed)
+    cur.close()
 
     # # clean up for the next message
     # embed.clear_fields()
