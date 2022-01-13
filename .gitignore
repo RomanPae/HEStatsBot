@@ -1,0 +1,10 @@
+.env
+.vscode/
+Include/
+Lib/
+Scripts/
+*.docx
+*.ppk
+*.ipynb
+Collector/
+*.log
