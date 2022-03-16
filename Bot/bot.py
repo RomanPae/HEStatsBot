@@ -64,9 +64,18 @@ async def add_team_driver(ctx, driver_name):
 
 @bot.command(name="rmtd", help="remove team driver")
 @commands.has_role("bot-verwalter")
-async def remove_team_driver(ctx):
+async def remove_team_driver(ctx, driver_name):
     cur = conn.cursor()
-    pass
+    try:
+        cur.execute("""
+            DELETE FROM team_drivers
+            WHERE name = %s;""", (driver_name,))
+        await ctx.send(f"Succesfully added {driver_name}")
+    except:
+        await ctx.send(f"Failed to add {driver_name}")
+    cur.close()
+    conn.commit()
+    
 
 @bot.command(name="ranking", help="shows ranking of team drivers")
 @commands.has_role("driver")
