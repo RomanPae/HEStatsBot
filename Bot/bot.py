@@ -59,6 +59,7 @@ async def add_team_driver(ctx, driver_name):
     except:
         await ctx.send(f"Failed to add {driver_name}")
     cur.close()
+    conn.commit()
     
 
 @bot.command(name="rmtd", help="remove team driver")
