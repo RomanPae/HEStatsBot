@@ -49,40 +49,23 @@ except:
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
-# @bot.command(name="update", help="does nothing")
-# @commands.has_role("bot-verwalter")
-# async def update_data(ctx):
-#     #fully clear the list, so that there are no issues with doubling because of appending
-#     global driver_list
-#     driver_list.clear()
-#     for driver in _config ["driver_ids"]:
-#         print(f"searching for {driver}")
-#         try:
-#             driver_data = await ir.driver_stats(search=driver)
-#             driver_list.append(driver_data)
-#         except: 
-#             print (f"Problem with {driver}")
-#             pass
+@bot.command(name="addtd", help="add team driver")
+@commands.has_role("bot-verwalter")
+async def add_team_driver(ctx, driver_name):
+    cur = conn.cursor()
+    try:
+        cur.execute("INSERT INTO team_drivers (name) VALUES (%s);", (driver_name,))
+        await ctx.send(f"Succesfully added {driver_name}")
+    except:
+        await ctx.send(f"Failed to add {driver_name}")
+    cur.close()
     
-#     # Put everything into a DataFrame so its easy to sort etc.
-#     incidents_avg, display_name, irating, license_class = [], [], [], []
-#     for driver in driver_list:
-#         display_name.append(driver[0].display_name)
-#         irating.append(driver[0].irating)
-#         incidents_avg.append(driver[0].incidents_avg)
-#         license_class.append(driver[0].license_class)
-#     #small helper dict    
-#     dict = {"display_name": display_name , "irating": irating , "incidents_avg": incidents_avg, "license_class": license_class}   
-#     driver_df = pd.DataFrame(dict)
-#     # remove the old pickle if it exists
-#     try:
-#         os.remove("driver_df.pkl")
-#     except:
-#         pass
-#     #pickle the dataframe for later use
-#     driver_df.to_pickle("driver_df.pkl")
 
-#     await ctx.send('Finished')
+@bot.command(name="rmtd", help="remove team driver")
+@commands.has_role("bot-verwalter")
+async def remove_team_driver(ctx):
+    cur = conn.cursor()
+    pass
 
 @bot.command(name="ranking", help="shows ranking of team drivers")
 @commands.has_role("driver")
@@ -117,7 +100,7 @@ async def ranking(ctx):
 
     # add average
     rating_avg = int(rating_sum / i)
-    display_name.append ("Team Average")
+    display_name.append ("team average")
     irating.append(f"{rating_avg}")
 
     # create Field for Team Position
