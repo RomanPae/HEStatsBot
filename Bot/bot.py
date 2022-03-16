@@ -70,9 +70,9 @@ async def remove_team_driver(ctx, driver_name):
         cur.execute("""
             DELETE FROM team_drivers
             WHERE name = %s;""", (driver_name,))
-        await ctx.send(f"Succesfully added {driver_name}")
+        await ctx.send(f"Succesfully removed {driver_name}")
     except:
-        await ctx.send(f"Failed to add {driver_name}")
+        await ctx.send(f"Failed to remove {driver_name}")
     cur.close()
     conn.commit()
     
